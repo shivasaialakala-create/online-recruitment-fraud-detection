@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORF Prediction Result</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* --- Color Palette & Variables --- */
+        :root {
+            --primary-blue: #3498db;
+            --success-green: #27ae60;
+            --fail-red: #e74c3c;
+            --bg-light: #f4f7f6;
+            --text-dark: #2c3e50;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        /* --- Base Styles --- */
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- Result Card Container --- */
+        .result-container {
+            background-color: var(--white);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            max-width: 750px;
+            width: 90%;
+            margin: 50px auto 30px;
+            text-align: center;
+            transition: all 0.4s ease-in-out;
+            border-top: 5px solid var(--primary-blue);
+        }
+
+        /* --- Title --- */
+        h1 {
+            color: var(--text-dark);
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            font-size: 1.1em;
+            color: #7f8c8d;
+            margin-bottom: 25px;
+        }
+
+        /* --- Prediction Display --- */
+        .prediction-box {
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+            font-weight: 700;
+            font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 1.5s infinite alternate;
+        }
+
+        .prediction-box i {
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+
+        /* Status: SUCCESS (No Fraud) */
+        .prediction-box.success {
+            color: var(--success-green);
+            background-color: #e8f5e9;
+            border: 3px solid var(--success-green);
+        }
+        /* Status: FAIL (Fraud Detected) */
+        .prediction-box.fail {
+            color: var(--fail-red);
+            background-color: #fceceb;
+            border: 3px solid var(--fail-red);
+        }
+
+        /* --- Recommendations Section --- */
+        .recommendations {
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            text-align: left;
+        }
+
+        .recommendations h3 {
+            color: var(--primary-blue);
+            font-size: 1.4em;
+            font-weight: 600;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .recommendations ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .recommendations ul li {
+            margin-bottom: 15px;
+            font-size: 1em;
+            color: #555;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .recommendations ul li .icon {
+            font-size: 1.2em;
+            margin-right: 10px;
+            line-height: 1.5;
+        }
+
+        /* --- Button Group --- */
+        .button-group {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .button {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .button i {
+            margin-right: 8px;
+        }
+
+        .button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Secondary button style */
+        .button.secondary {
+            background-color: #7f8c8d;
+        }
+        .button.secondary:hover {
+            background-color: #5d6d7e;
+        }
+
+        /* --- Footer --- */
+        .footer {
+            margin-top: auto; /* Push to the bottom */
+            padding: 15px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.85em;
+            color: var(--text-dark);
+        }
+
+        /* --- Animation --- */
+        @keyframes pulse {
+            from { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4); }
+            to { box-shadow: 0 0 0 10px rgba(46, 204, 113, 0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="result-container">
+    <h1><i class="fas fa-shield-alt" style="color: var(--primary-blue);"></i> ORF Detection Result</h1>
+    <p class="subtitle">Analysis completed using the Deep Learning CNN Model.</p>
+    
+    {% if prediction == 'Fraudulent Job Posting' %}
+        <div class="prediction-box fail">
+            <i class="fas fa-exclamation-triangle"></i>
+            HIGH RISK: Fraudulent Job Posting
+        </div>
+        
+        <div class="recommendations">
+            <h3><i class="fas fa-eye"></i> Recommendations & Actions</h3>
+            <ul>
+                <li><span class="icon" style="color: var(--fail-red);">❌</span> **Immediate Action:** The system flags this posting for manual review by an HR specialist.</li>
+                <li><span class="icon" style="color: var(--fail-red);">❌</span> **Security Check:** Verify the company's official website and contact details independently of the job post.</li>
+                <li><span class="icon" style="color: var(--fail-red);">❌</span> **Warning Signs:** Be cautious of overly generic descriptions, high salaries for low experience, or free email domains (like Gmail/Yahoo).</li>
+            </ul>
+        </div>
+        
+    {% else %}
+        <div class="prediction-box success">
+            <i class="fas fa-check-circle"></i>
+            LOW RISK: Legitimate Job Posting
+        </div>
+        
+        <div class="recommendations">
+            <h3><i class="fas fa-info-circle"></i> Next Steps & Caution</h3>
+            <ul>
+                <li><span class="icon" style="color: var(--success-green);">✔️</span> **Proceed with Confidence:** The deep learning model indicates a high probability that this is a genuine job opportunity.</li>
+                <li><span class="icon" style="color: var(--success-green);">✔️</span> **Source Verification:** Always double-check the job is posted on the company's official career page or a trusted platform.</li>
+                <li><span class="icon" style="color: #f39c12;">⚠️</span> **Remain Vigilant:** While low risk, never share sensitive personal/financial information prematurely in the hiring process.</li>
+            </ul>
+        </div>
+        
+    {% endif %}
+
+    <div class="button-group">
+        <a href="{{ url_for('predict') }}" class="button">
+            <i class="fas fa-redo-alt"></i> Analyze New Job Post
+        </a>
+        <a href="{{ url_for('dashboard') }}" class="button secondary">
+            <i class="fas fa-tachometer-alt"></i> Go to Dashboard
+        </a>
+    </div>
+</div>
+
+<div class="footer">
+    &copy; 2025 Online Recruitment Fraud (ORF) Detection Project. All Rights Reserved. | 
+    <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
+</div>
+
+</body>
+</html>

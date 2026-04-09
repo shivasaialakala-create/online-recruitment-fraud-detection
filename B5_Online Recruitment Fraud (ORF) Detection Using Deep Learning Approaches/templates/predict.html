@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORF Prediction Tool</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* --- Color Palette & Variables --- */
+        :root {
+            --primary-blue: #3498db; /* Main action color */
+            --dark-bg: #1e272e; /* Deep dark background */
+            --container-bg: #ffffff; /* Clean white container */
+            --text-dark: #2c3e50;
+            --text-light: #ecf0f1;
+            --danger-red: #e74c3c;
+            --font-family: 'Poppins', sans-serif;
+            --input-border: #bdc3c7;
+        }
+
+       /* --- Base Styles --- */
+body {
+    background-color: var(--dark-bg);
+    background-image: url("/static/images/image5.jpg"); /* Adjust path as needed */
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: var(--font-family, 'Segoe UI', sans-serif);
+    margin: 0;
+    padding: 20px;
+    color: #fff; /* Optional: Make text readable on dark image */
+}
+
+        
+        /* Add a subtle overlay for readability */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+
+        /* --- Main Container Card --- */
+        .container {
+            background-color: var(--container-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            max-width: 800px;
+            margin: 50px auto;
+            color: var(--text-dark);
+        }
+
+        /* --- Title --- */
+        h1 {
+            text-align: center;
+            color: var(--primary-blue);
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        /* --- Form Inputs --- */
+        label {
+            display: block;
+            margin: 15px 0 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.95em;
+        }
+
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid var(--input-border);
+            margin-bottom: 10px;
+            font-size: 1em;
+            background-color: #fcfcfc;
+            box-sizing: border-box; /* Crucial for padding/width calculation */
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.6);
+            outline: none;
+        }
+
+        /* --- Grid Layout for Form --- */
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .submit-btn, .dashboard-link {
+            grid-column: span 2; /* Make button and link span both columns */
+        }
+        
+        /* --- Submit Button --- */
+        .submit-btn {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .submit-btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* --- Loading Indicator --- */
+        .loading-indicator {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            grid-column: span 2;
+        }
+        .loading-indicator img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        .loading-indicator p {
+            color: var(--primary-blue);
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+
+        /* --- Output & Dashboard Link --- */
+        .output-label {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-top: 20px;
+            color: var(--danger-red);
+            text-align: center;
+            padding: 15px;
+            border: 2px solid var(--danger-red);
+            border-radius: 8px;
+            background-color: #fef5f5;
+        }
+
+        .dashboard-link {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+}
+
+.dashboard-btn {
+    display: inline-flex;
+    align-items: center;
+    background-color: #4CAF50; /* Green */
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.dashboard-btn i {
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.dashboard-btn:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 15px;
+            font-size: 0.85em;
+            color: var(--text-light);
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 600px) {
+            form {
+                grid-template-columns: 1fr; /* Single column on small screens */
+            }
+            .submit-btn, .dashboard-link {
+                grid-column: span 1;
+            }
+            .container {
+                margin: 20px auto;
+                padding: 25px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <i class="fas fa-shield-halved fa-2x" style="color: var(--primary-blue); margin-bottom: 15px; display: block; text-align: center;"></i>
+    <h1>ORF Prediction Tool</h1>
+    <form method="POST" action="/predict" onsubmit="showLoadingIndicator(event)">
+        
+        <div class="input-group">
+            <label for="job_title"><i class="fas fa-briefcase"></i> Job Title</label>
+            <select name="job_title" id="job_title" required>
+                <option value="">Select Job Title</option>
+                <option value="Cybersecurity Analyst">Cybersecurity Analyst</option>
+                <option value="HR Executive">HR Executive</option>
+                <option value="Machine Learning Engineer">Machine Learning Engineer</option>
+                <option value="Marketing Manager">Marketing Manager</option>
+                <option value="Sales Associate">Sales Associate</option>
+                <option value="Data Analyst">Data Analyst</option>
+                <option value="Software Engineer">Software Engineer</option>
+                <option value="Graphic Designer">Graphic Designer</option>
+            </select>
+        </div>
+        
+        <div class="input-group">
+            <label for="job_type"><i class="fas fa-clock"></i> Job Type</label>
+            <select name="job_type" id="job_type" required>
+                <option value="">Select Job Type</option>
+                <option value="Full-time">Full-time</option>
+                <option value="Part-time">Part-time</option>
+                <option value="Contract">Contract</option>
+                <option value="Internship">Internship</option>
+            </select>
+        </div>
+        
+        <div class="input-group">
+            <label for="salary_offered"><i class="fas fa-sack-dollar"></i> Salary Offered</label>
+            <input type="text" name="salary_offered" id="salary_offered" required placeholder="e.g., $50000-$60000" pattern="^(\$[\d,]+-?[\d,]*|\d+-?\d*)$">
+        </div>
+        
+        <div class="input-group">
+            <label for="job_location"><i class="fas fa-globe"></i> Job Location</label>
+            <select name="job_location" id="job_location" required>
+                <option value="">Select Job Location</option>
+                <option value="UK">UK</option>
+                <option value="India">India</option>
+                <option value="Remote">Remote</option>
+                <option value="Canada">Canada</option>
+                <option value="USA">USA</option>
+                <option value="Germany">Germany</option>
+            </select>
+        </div>
+        
+        <div class="input-group">
+            <label for="remote"><i class="fas fa-home"></i> Remote Option</label>
+            <select name="remote" id="remote" required>
+                <option value="">Select Remote Status</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="required_experience"><i class="fas fa-star"></i> Required Experience (Years)</label>
+            <input type="text" name="required_experience" id="required_experience" required placeholder="e.g., 2-5 years" pattern="^\d+-?\d*\s*(?:years?)?$">
+        </div>
+
+        <div class="input-group">
+            <label for="company_rating"><i class="fas fa-building"></i> Company Rating (0-5)</label>
+            <input type="number" name="company_rating" id="company_rating" min="0" max="5" step="0.1" required placeholder="Enter rating (e.g., 4.5)">
+        </div>
+
+        <div class="input-group">
+            <label for="job_description_length"><i class="fas fa-file-lines"></i> Description Length (Characters)</label>
+            <input type="number" name="job_description_length" id="job_description_length" required step="1" placeholder="Enter character count (e.g., 1500)">
+        </div>
+
+        <div class="input-group">
+            <label for="number_of_applicants"><i class="fas fa-users"></i> Number of Applicants</label>
+            <input type="number" name="number_of_applicants" id="number_of_applicants" required step="1" placeholder="Enter count (e.g., 50)">
+        </div>
+
+        <div class="input-group">
+            <label for="email_domain"><i class="fas fa-at"></i> Contact Email Domain</label>
+            <select name="email_domain" id="email_domain" required>
+                <option value="">Select Email Domain</option>
+                <option value="gmail.com">gmail.com (High Risk)</option>
+                <option value="company.com">company.com (Low Risk)</option>
+                <option value="hr-recruit.com">hr-recruit.com (Medium Risk)</option>
+                <option value="yahoo.com">yahoo.com (High Risk)</option>
+            </select>
+        </div>
+        
+        <div class="input-group">
+            <label for="phone_contact"><i class="fas fa-phone"></i> Phone Contact Provided</label>
+            <select name="phone_contact" id="phone_contact" required>
+                <option value="">Select Phone Contact Status</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+
+        <button type="submit" class="submit-btn">
+            <i class="fas fa-search-dollar mr-2"></i> Analyze for Fraud
+        </button>
+    </form>
+
+    <div class="loading-indicator">
+        <img src="https://i.gifer.com/7ajs.gif" alt="Loading..." style="border: 2px solid var(--primary-blue);">
+        <p>Analyzing job posting... Please wait.</p>
+    </div>
+
+</div>
+
+<div class="dashboard-link">
+    <a href="/dashboard" class="dashboard-btn">
+        <i class="fas fa-tachometer-alt"></i> Go to Dashboard
+    </a>
+</div>
+
+
+<div class="footer">
+    &copy; 2025 Online Recruitment Fraud (ORF) Detection Using Deep Learning Approaches Project. All Rights Reserved.
+</div>
+
+<script>
+    function showLoadingIndicator(event) {
+        // Prevent default submission initially to show indicator
+        // The form submission is handled after the indicator is shown
+        // In a real Flask app, you'd use AJAX here instead of this simple redirect
+        event.preventDefault(); 
+        
+        // Show loading indicator
+        document.querySelector('.loading-indicator').style.display = 'block';
+
+        // Disable button to prevent double-click
+        const submitBtn = document.querySelector('.submit-btn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Analyzing...';
+
+        // Submit the form after a short delay to allow indicator to render
+        setTimeout(() => {
+            event.target.submit();
+        }, 100); 
+    }
+</script>
+
+</body>
+</html>

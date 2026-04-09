@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application of Deep learning in Flood Prediction and Management in Indian Coastal Areas</title>
+    <style>
+       body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* Full height */
+    background-image: url('static/images/giphy.gif'); /* Corrected background image path */
+    background-size: cover; /* Cover the entire area */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Prevent the image from repeating */
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 2.5em;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+#chatbox {
+    border-radius: 15px;
+    padding: 20px;
+    height: 500px;
+    width: 100%;
+    max-width: 700px;
+    background: linear-gradient(to bottom right, #ffffff, #f1f8e9);
+    overflow-y: scroll;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+}
+
+.message {
+    margin: 10px 0;
+    padding: 12px 15px;
+    border-radius: 20px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.user {
+    background-color: #0084ff; /* Bright blue for user messages */
+    margin-left: auto;
+    color: white; /* White text for better contrast */
+}
+
+.bot {
+    background-color: #f1f1f1; /* Light gray for bot messages */
+    margin-right: auto;
+    color: #333; /* Dark text for visibility */
+}
+
+#input-container {
+    display: flex;
+    margin-top: 10px;
+    width: 100%;
+    max-width: 800px;
+}
+
+#input {
+    flex: 1;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#send {
+    padding: 15px 20px;
+    background-color: #81d4fa;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 16px;
+}
+
+#send:hover {
+    background-color: #4fc3f7;
+}
+
+a {
+    color: #FF5722; /* Change this to your desired link color */
+    text-decoration: none; /* Remove underline */
+}
+
+a:hover {
+    text-decoration: underline; /* Add underline on hover */
+    color: #D84315; /* Optional: Darker shade on hover */
+}
+</style>
+</head>
+<body>
+    <h1>Song Recommender Chatbot</h1>
+    <div id="chatbox"></div>
+    <div id="input-container">
+        <input type="text" id="input" placeholder="Type your message..." />
+        <button id="send">Send</button>
+    </div>
+    <div id="songs">
+        {% for song in songs %}
+            <div class="song">
+                <strong>{{ song.title }}</strong> by {{ song.artist }} 
+                - <a href="{{ song.links.YouTube.url }}" target="_blank">{{ song.links.YouTube.name }}</a>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        document.getElementById('send').onclick = function() {
+            const input = document.getElementById('input');
+            const message = input.value;
+            if (message.trim() === '') return;
+
+            appendMessage('user', message);
+            input.value = '';
+
+            fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                appendMessage('bot', data.response);
+            })
+            .catch(error => console.error('Error:', error));
+        };
+
+        function appendMessage(sender, text) {
+            const chatbox = document.getElementById('chatbox');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message ' + sender;
+            messageDiv.innerHTML = text; // Use innerHTML to support links
+            chatbox.appendChild(messageDiv);
+            chatbox.scrollTop = chatbox.scrollHeight; // Auto-scroll to the bottom
+        }
+    </script>
+    <br>
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+</body>
+</html>

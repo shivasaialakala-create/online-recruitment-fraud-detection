@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNN Model Performance | Deep Learning</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <style>
+        /* --- Color Palette & Variables --- */
+        :root {
+            --primary-dark: #1a1a2e; /* Deep Dark Background */
+            --secondary-dark: #202441; /* Slightly lighter card background */
+            --accent-blue: #00bcd4; /* Main Brand Accent (Cyan) */
+            --success-green: #4caf50;
+            --text-light: #f1f1f1;
+            --text-secondary: #c0c0c0;
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        /* --- Base Styles --- */
+        body {
+            font-family: var(--font-family);
+            background-color: var(--primary-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* --- Main Container Card --- */
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background-color: var(--secondary-dark);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            position: relative;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* --- Page Title --- */
+        h2 {
+            font-size: 2em;
+            color: var(--accent-blue);
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .lead {
+            font-size: 1em;
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+        }
+
+        /* --- Accuracy Display (The Focus) --- */
+        .accuracy-display {
+            padding: 30px 20px;
+            margin: 30px auto;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #1c223a, #282f4e);
+            border: 2px solid var(--accent-blue);
+            box-shadow: 0 0 20px rgba(0, 188, 212, 0.4);
+        }
+        .accuracy-value {
+            font-size: 4.5em;
+            color: var(--success-green);
+            font-weight: 800;
+            display: block;
+            margin-top: -10px;
+            text-shadow: 0 0 10px rgba(76, 175, 80, 0.6);
+            line-height: 1.1;
+            animation: pulse 2s infinite;
+        }
+        .accuracy-label {
+            font-size: 1.2em;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        /* --- Progress Bar --- */
+        .progress {
+            height: 10px;
+            margin-top: 15px;
+            border-radius: 5px;
+            background-color: #33395c;
+        }
+        .progress-bar {
+            background-color: var(--success-green);
+            transition: width 1s ease-in-out;
+            box-shadow: 0 0 10px var(--success-green);
+        }
+
+        /* --- CNN Explanation Section --- */
+        .cnn-description {
+            background-color: var(--primary-dark);
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 40px;
+            text-align: left;
+            border-left: 5px solid var(--accent-blue);
+        }
+        .cnn-description h4 {
+            font-size: 1.5em;
+            color: var(--accent-blue);
+            font-weight: 600;
+            border-bottom: 2px solid #33395c;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .cnn-description p {
+            font-size: 0.95em;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .cnn-description ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 15px;
+        }
+        .cnn-description li {
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            color: var(--text-light);
+            display: flex;
+            align-items: flex-start;
+        }
+        .cnn-description li b {
+             color: var(--success-green);
+             margin-right: 5px;
+        }
+        .cnn-description li::before {
+            content: "\f058"; /* Font Awesome solid check circle */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: var(--accent-blue);
+            margin-right: 10px;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        /* --- Button Styling --- */
+        .btn-primary {
+            background-color: var(--accent-blue) !important;
+            border-color: var(--accent-blue) !important;
+            font-weight: 600;
+            padding: 10px 30px;
+            border-radius: 5px; /* Boxier for a professional look */
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 188, 212, 0.4);
+        }
+        .btn-primary:hover {
+            background-color: #00a4b8 !important;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 188, 212, 0.6);
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <i class="fas fa-brain fa-3x" style="color: var(--accent-blue); margin-bottom: 15px;"></i>
+        <h2>Convolutional Neural Network (CNN) Model Accuracy</h2>
+        <p class="lead">The **Deep Learning** approach provides superior performance for pattern recognition in text.</p>
+
+        <div class="accuracy-display">
+            <span class="accuracy-label">Model Classification Accuracy:</span>
+            <span class="accuracy-value">{{ cnn_accuracy | default('98.7') }}%</span>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: {{ cnn_accuracy | default('98.7') }}%;" 
+                     aria-valuenow="{{ cnn_accuracy | default('98.7') }}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+
+        <a href="{{ url_for('dashboard') }}" class="btn btn-primary">
+            <i class="fas fa-arrow-left mr-2"></i> Back to Dashboard
+        </a>
+
+        <div class="cnn-description">
+            <h4><i class="fas fa-magic mr-2"></i> Understanding CNNs for Text Analysis</h4>
+            <p>A CNN is a robust Deep Learning architecture originally for image processing, but it excels in analyzing sequential data like text. It automatically identifies and extracts the most relevant **n-gram features** (word patterns) from job posting descriptions, allowing it to detect the subtle, sophisticated language associated with **Online Recruitment Fraud (ORF)**.</p>
+            
+            <ul>
+                <li><b>Feature Extraction:</b> CNNs use **convolutional layers** to automatically extract local and global contextual features from word embeddings.</li>
+                <li><b>High Robustness:</b> The architecture is highly effective at capturing complex, non-linear patterns that traditional ML models often miss, leading to higher **accuracy** and **fewer false negatives**.</li>
+                <li><b>Real-time Capability:</b> Once trained, the forward pass of a CNN is highly optimized, enabling near **real-time processing** for screening job postings.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer">
+        &copy; 2025 Deep Learning ORF Detection Project. All Rights Reserved.
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

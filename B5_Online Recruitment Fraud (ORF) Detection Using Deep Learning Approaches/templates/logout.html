@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Song Recommender Chatbot</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #chatbox { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll; }
+        .message { margin: 5px; }
+        .user { text-align: right; }
+        .bot { text-align: left; }
+        #input { width: 80%; }
+        #send { width: 18%; }
+    </style>
+</head>
+<body>
+    <h1>Application of Deep learning in Flood Prediction and Management in Indian Coastal Areas</h1>
+    <div id="chatbox"></div>
+    <input type="text" id="input" placeholder="Type your message...">
+    <button id="send">Send</button>
+
+    <script>
+        document.getElementById('send').onclick = function() {
+            const input = document.getElementById('input');
+            const message = input.value;
+            if (message.trim() === '') return;
+
+            // Display user message
+            appendMessage('user', message);
+            input.value = '';
+
+            // Send the message to the server
+            fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                appendMessage('bot', data.response);
+            })
+            .catch(error => console.error('Error:', error));
+        };
+
+        function appendMessage(sender, text) {
+            const chatbox = document.getElementById('chatbox');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message ' + sender;
+            messageDiv.innerHTML = text; // Use innerHTML to support links and audio
+            chatbox.appendChild(messageDiv);
+            chatbox.scrollTop = chatbox.scrollHeight; // Auto-scroll to the bottom
+        }
+    </script>
+</body>
+</html>

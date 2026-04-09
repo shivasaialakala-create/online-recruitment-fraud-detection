@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Recruitment Fraud (ORF) Detection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* Modern Color Palette */
+        :root {
+            --primary-dark: #1a1a1a; /* Darker near black */
+            --secondary-blue: #0096FF; /* Slightly brighter blue for emphasis */
+            --accent-green: #3DDC84; /* Vibrant green for action/success */
+            --text-light: #f1f3f5;
+        }
+
+        /* Base Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--primary-dark);
+            overflow: auto; /* Allow scroll for complete view */
+        }
+        
+        /* Background & Overlay for readability */
+        .background-wrap {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('static/images/online-fraud.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(80%) brightness(20%); /* Make it darker */
+            z-index: -2;
+        }
+
+        /* Header/Navigation Bar */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background-color: rgba(26, 26, 26, 0.95); /* Very slight transparency */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Stronger shadow */
+            z-index: 10;
+            width: 100%;
+            position: fixed; /* Fixed header for real-time feel */
+            top: 0;
+        }
+        .logo-text {
+            color: var(--secondary-blue);
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .logo-icon {
+            margin-right: 8px;
+            color: var(--accent-green);
+            transition: transform 0.5s ease-in-out;
+        }
+        .logo-text:hover .logo-icon {
+            transform: rotate(10deg) scale(1.1); /* Subtle interactive effect */
+        }
+        
+        /* Navigation Buttons */
+        .nav-buttons a {
+            padding: 10px 20px;
+            margin-left: 10px;
+            border-radius: 50px; /* Pill shape for modern look */
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .nav-buttons .login-btn {
+            background-color: transparent;
+            color: var(--secondary-blue);
+            border: 2px solid var(--secondary-blue);
+        }
+        .nav-buttons .login-btn:hover {
+            background-color: rgba(0, 150, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 150, 255, 0.3);
+        }
+        .nav-buttons .signup-btn {
+            background-color: var(--accent-green);
+            color: var(--primary-dark);
+            border: none;
+        }
+        .nav-buttons .signup-btn:hover {
+            background-color: #31ad71;
+            color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(61, 220, 132, 0.4);
+        }
+
+        /* Hero Section - Main Content Area */
+        .hero-section {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 150px 20px 100px; /* Top padding accounts for fixed header */
+            z-index: 5;
+            position: relative;
+        }
+        /* Gradient overlay for a richer, atmospheric effect */
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to top, var(--primary-dark) 0%, rgba(26, 26, 26, 0) 100%);
+            z-index: -1;
+        }
+        .hero-section h1 {
+            color: var(--text-light);
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            max-width: 1000px;
+            line-height: 1.1;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+        }
+        .hero-section p {
+            color: var(--text-light);
+            font-size: 24px;
+            margin-bottom: 50px;
+            max-width: 750px;
+            opacity: 0.9;
+        }
+
+        /* NEW: Hero Call to Action Button */
+        .hero-cta {
+            background-color: var(--accent-green);
+            color: var(--primary-dark);
+            padding: 18px 40px;
+            font-size: 22px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.4s;
+            box-shadow: 0 0 15px rgba(61, 220, 132, 0.5); /* Subtle glow */
+            border: none;
+        }
+        .hero-cta:hover {
+            background-color: #31ad71;
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 0 25px rgba(61, 220, 132, 0.8), 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* NEW: Footer Style */
+        .footer {
+            width: 100%;
+            padding: 20px 40px;
+            background-color: var(--primary-dark);
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
+            font-size: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 10;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 900px) {
+            .header {
+                padding: 15px 20px;
+            }
+            .logo-text {
+                font-size: 20px;
+            }
+            .nav-buttons a {
+                padding: 8px 15px;
+            }
+            .hero-section h1 {
+                font-size: 40px;
+            }
+            .hero-section p {
+                font-size: 20px;
+            }
+            .hero-cta {
+                padding: 15px 30px;
+                font-size: 18px;
+            }
+        }
+        @media (max-width: 600px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .logo-text {
+                margin-bottom: 10px;
+            }
+            .nav-buttons a {
+                margin: 5px;
+            }
+            .hero-section {
+                padding-top: 120px; /* Adjust for stacked header */
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="background-wrap"></div>
+
+    <div class="header">
+        <div class="logo-text">
+            <i class="fas fa-shield-alt logo-icon"></i>
+            Online Recruitment Fraud  Detection Deep Learning
+        </div>
+        <div class="nav-buttons">
+            <a href="/login" class="login-btn">
+                <i class="fas fa-sign-in-alt" style="margin-right: 5px;"></i>
+                Login
+            </a>
+            <a href="/signup" class="signup-btn">
+                <i class="fas fa-user-plus" style="margin-right: 5px;"></i>
+                Register
+            </a>
+        </div>
+    </div>
+
+    <div class="hero-section">
+        <h1>Online Recruitment Fraud (ORF) Detection <span style="color: var(--accent-green);">Powered by Deep Learning</span></h1>
+        <p>
+            Secure your job search. Our cutting-edge system leverages **Deep Learning Approaches** to analyze job postings and instantly identify fraudulent activity, ensuring your safety in the digital job market.
+        </p>
+        
+    </div>
+
+    <div class="footer">
+        &copy; 2025 ORF Detection Project. | Research & Development in Deep Learning.
+    </div>
+    
+</body>
+</html>

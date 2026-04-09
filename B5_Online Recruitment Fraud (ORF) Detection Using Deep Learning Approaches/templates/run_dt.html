@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decision Tree Model Performance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+        /* --- Custom Variables & Overrides --- */
+        :root {
+            --primary-color: #3f51b5; /* Indigo/Blue for main accents */
+            --success-color: #4caf50; /* Primary data success color */
+            --bg-light: #f4f7f6;
+            --text-dark: #333;
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        /* --- Header Styling --- */
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+        .header h2 {
+            font-weight: 700;
+        }
+        .header .lead {
+            opacity: 0.9;
+        }
+
+        /* --- Main Accuracy Display (Elevated) --- */
+        .accuracy-box {
+            background: linear-gradient(135deg, var(--success-color) 0%, #66bb6a 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            margin-top: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+            animation: fadeInScale 0.6s ease-out;
+            border-top: 5px solid #d1e7dd; /* Light accent on top */
+        }
+        .accuracy-box h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .accuracy-box h3 strong {
+            margin-left: 15px;
+            font-size: 3rem;
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .accuracy-box p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* --- Content Card (For Additional Details) --- */
+        .content-card {
+            background-color: var(--light);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--primary-color);
+            margin-top: 20px;
+        }
+        .content-card h4 {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        /* --- Button Styling --- */
+        .btn-primary {
+            background-color: var(--primary-color) !important;
+            border-color: var(--primary-color) !important;
+            font-weight: 600;
+            padding: 12px 30px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #303f9f !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* --- Animation --- */
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="header text-center">
+            <h2 class="mb-2"><i class="fas fa-tree mr-2"></i> Decision Tree Model Performance</h2>
+            <p class="lead">This page provides an overview of the model's predictive capability in detecting recruitment fraud.</p>
+        </div>
+        
+        <div class="accuracy-box text-center">
+            <h3>
+                <i class="fas fa-check-circle"></i>
+                Model Accuracy: 
+                <strong>{{ dt_accuracy | default('N/A') }}%</strong>
+            </h3>
+            <p class="mt-3">This metric indicates the percentage of job postings (both fraudulent and legitimate) that the model classified correctly on the testing data.</p>
+        </div>
+        
+        <div class="content-card">
+            <h4><i class="fas fa-info-circle mr-2"></i> About the Decision Tree Algorithm</h4>
+            <p>The Decision Tree algorithm works by **splitting the data** based on different feature values. It recursively partitions the dataset into smaller and smaller subsets, creating a tree-like structure of decisions. This approach is highly **interpretable** and is often used as a baseline for classification tasks in machine learning.</p>
+            
+            <h4 class="mt-4"><i class="fas fa-chart-bar mr-2"></i> Next Steps & Interpretation</h4>
+            <p>While accuracy is a crucial metric, for fraud detection, we must also consider **Precision** (avoiding false alerts) and **Recall** (catching all fraud). Review the full dashboard for a comparison of the Decision Tree model against more complex deep learning models like CNN and Random Forest.</p>
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-arrow-left mr-2"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

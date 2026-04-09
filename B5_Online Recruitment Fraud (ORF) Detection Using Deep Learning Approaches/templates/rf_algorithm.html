@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ algorithm_name | default('Random Forest') }} Algorithm Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* --- Color Palette & Variables --- */
+        :root {
+            --primary-blue: #007bff; /* Main brand color for accents */
+            --light-bg: #f8f9fa; /* Light grey background */
+            --white: #ffffff;
+            --text-dark: #343a40;
+            --success-green: #28a745;
+            --warning-orange: #ffc107;
+            --info-blue: #17a2b8;
+            --card-border: #e9ecef;
+            --font-family: 'Roboto', sans-serif;
+        }
+
+        /* --- Base Styles --- */
+        body {
+            font-family: var(--font-family);
+            background-color: var(--light-bg);
+            padding: 0;
+            margin: 0;
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        /* --- Main Container for Centering Content --- */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* --- Header --- */
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary-blue);
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        /* --- Buttons --- */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .button {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 30px;
+            color: var(--white);
+            background-color: var(--primary-blue);
+            border: none;
+            border-radius: 5px; /* Use a slight rounding for modern feel */
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1.0em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+        }
+
+        .button i {
+            margin-right: 8px;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
+        }
+
+        /* --- Card Styles (Replaced .algorithm-details, .metric) --- */
+        .card {
+            background-color: var(--white);
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid var(--primary-blue); /* Visual accent */
+        }
+
+        .section-header {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 12px 20px;
+            font-size: 1.3em;
+            border-radius: 5px;
+            margin: -25px -25px 20px -25px; /* Pull header to card edges */
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        .section-header i {
+            margin-right: 10px;
+        }
+
+        /* --- Accuracy Display --- */
+        .accuracy {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            font-size: 2.2em;
+            color: var(--success-green);
+            background-color: #d4edda; /* Light success background */
+            border-radius: 12px;
+            border: 4px solid var(--success-green);
+            margin: 30px 0;
+            font-weight: 700;
+            animation: pulse 1.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+            to { box-shadow: 0 0 0 15px rgba(40, 167, 69, 0); }
+        }
+
+        /* --- Key Features List --- */
+        .feature-list {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 15px;
+        }
+
+        .feature-list li {
+            padding: 10px 15px;
+            margin: 8px 0;
+            border-radius: 5px;
+            background-color: #f7f7f7;
+            border-left: 3px solid var(--info-blue);
+            font-size: 1em;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+        }
+        .feature-list li strong {
+            color: var(--primary-blue);
+            font-weight: 500;
+        }
+        .feature-list li::before {
+            content: "\f00c"; /* Font Awesome Check Mark */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: var(--success-green);
+            margin-right: 10px;
+        }
+        
+        /* --- Metrics Table --- */
+        .metrics-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .metrics-table th, .metrics-table td {
+            padding: 12px;
+            border: 1px solid var(--card-border);
+        }
+
+        .metrics-table th {
+            background-color: var(--info-blue);
+            color: var(--white);
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .metrics-table td {
+            background-color: #f8f9fa;
+        }
+        
+        .metrics-table tr:nth-child(even) td {
+            background-color: #eff3f6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h1><i class="fas fa-random"></i> Random Forest Algorithm</h1>
+            <p class="text-muted">Details and Evaluation for Online Recruitment Fraud (ORF) Detection</p>
+        </div>
+        
+        <div class="card">
+            <div class="section-header"><i class="fas fa-info-circle"></i> Algorithm Overview</div>
+            <p>The **Random Forest (RF)** algorithm is a powerful **ensemble learning** technique used for both classification and regression tasks. It is fundamentally a collection, or "forest," of **Decision Trees**. By training each tree on a random subset of the data and features (a process called *bagging*), it significantly reduces the risk of **overfitting** that individual decision trees often face.</p>
+            <p>During prediction, the model utilizes the collective intelligence of the forest: for classification, it takes a **majority vote** from all trees; for regression, it averages their outputs. This combination of diversity and aggregation results in a highly robust, accurate, and generalized model.</p>
+        </div>
+        
+        <div class="card">
+            <div class="section-header"><i class="fas fa-cogs"></i> Key Strengths</div>
+            <ul class="feature-list">
+                <li><strong>Robustness:</strong> Highly resistant to overfitting and works well with noisy data.</li>
+                <li><strong>Feature Importance:</strong> Provides scores to rank the most influential features, which is crucial for interpretability.</li>
+                <li><strong>Handles Non-Linearity:</strong> Excels at capturing complex, non-linear relationships in the data.</li>
+                <li><strong>Parallel Processing:</strong> Trees are built independently, making the training process highly efficient and scalable.</li>
+                <li><strong>Missing Values:</strong> Less sensitive to missing data compared to other algorithms.</li>
+            </ul>
+        </div>
+        
+        <div class="accuracy">
+            <i class="fas fa-chart-line" style="margin-right: 15px;"></i> Final Accuracy: 
+            <span style="margin-left: 10px;">{{ rf_accuracy | default('92.5') }}%</span>
+        </div>
+
+        <div class="card">
+            <div class="section-header"><i class="fas fa-table"></i> Evaluation Metrics</div>
+            
+            <table class="metrics-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Value</th>
+                        <th>Interpretation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Accuracy</td>
+                        <td>{{ rf_accuracy | default('0.925') }}</td>
+                        <td>Overall proportion of correct predictions.</td>
+                    </tr>
+                    <tr>
+                        <td>Precision</td>
+                        <td>{{ rf_precision | default('0.880') }}</td>
+                        <td>Of all job postings predicted as FRAUD, this is the percentage that were *actually* fraudulent. (Minimize false positives)</td>
+                    </tr>
+                    <tr>
+                        <td>Recall</td>
+                        <td>{{ rf_recall | default('0.952') }}</td>
+                        <td>Of all *actual* fraudulent postings, this is the percentage the model correctly identified. (Minimize false negatives)</td>
+                    </tr>
+                    <tr>
+                        <td>F1-Score</td>
+                        <td>{{ rf_f1 | default('0.915') }}</td>
+                        <td>The harmonic mean of Precision and Recall, providing a single balanced metric.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="button-container">
+            <a href="{{ url_for('dashboard') }}" class="button">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+
+    </div>
+</body>
+</html>

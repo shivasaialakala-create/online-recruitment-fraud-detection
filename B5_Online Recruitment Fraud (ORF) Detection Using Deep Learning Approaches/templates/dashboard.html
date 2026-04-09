@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORF Detection Dashboard | Deep Learning</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Color Palette & Variables --- */
+        :root {
+            --primary-dark: #222831; /* Dark Background */
+            --secondary-dark: #393E46; /* Card Background */
+            --accent-green: #00ADB5; /* Main Accent/Active Color */
+            --accent-red: #FF5722; /* Logout/Alert Color */
+            --text-light: #EEEEEE;
+            --text-dark: #222831;
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        /* --- Base & Background --- */
+        body {
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background-image: url('static/images/image5.jpg');
+            background-size: cover;
+            background-attachment: fixed; /* Fix background image */
+            background-position: center;
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Dark Overlay for better text readability */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent overlay */
+            z-index: -1; /* Place behind content but above image */
+        }
+
+        /* --- Header/Navigation --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background-color: rgba(34, 40, 49, 0.95); /* Semi-transparent dark */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-sizing: border-box;
+            animation: slideDown 0.5s ease-in-out;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 1.5em; /* Reduced size for header balance */
+            margin: 0;
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        /* --- Buttons/Navigation Group --- */
+        .button-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .button {
+            padding: 10px 20px;
+            color: var(--text-light);
+            background-color: transparent; /* Default to transparent/outline style */
+            border: 2px solid var(--accent-green);
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: auto;
+        }
+
+        /* Specific Button Styles (using fill for primary actions) */
+        .button-rf, .button-dt, .button-cnn, .button-predict { 
+            background-color: var(--accent-green);
+            border-color: var(--accent-green);
+            color: var(--primary-dark);
+        }
+        
+        /* Logout Button - different color and outline */
+        .button-logout { 
+            background-color: transparent;
+            border-color: var(--accent-red);
+            color: var(--accent-red);
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+            /* Consistent hover color for all */
+            background-color: var(--accent-green);
+            color: var(--primary-dark);
+            border-color: var(--accent-green);
+        }
+        
+        .button-logout:hover {
+            background-color: var(--accent-red);
+            color: var(--text-light);
+            border-color: var(--accent-red);
+        }
+
+        .button:active {
+            transform: scale(0.98);
+            box-shadow: none;
+        }
+
+        /* --- Main Content Dashboard Grid --- */
+        .content {
+            flex-grow: 1; 
+            padding: 40px;
+            margin: 0 auto; /* Center the content area */
+            width: 100%;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive Grid */
+            gap: 20px;
+            padding-top: 100px; /* Space below sticky header */
+        }
+
+        .box {
+            padding: 25px;
+            border-radius: 12px;
+            background: var(--secondary-dark);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            color: var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+            min-height: 150px; /* Minimum height for uniform appearance */
+        }
+        
+        .box h2 {
+            color: var(--accent-green);
+            margin-top: 0;
+            font-size: 1.3em;
+            border-bottom: 2px solid rgba(0, 173, 181, 0.3);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .box p {
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        /* Delayed animation for dashboard elements */
+        .project-overview { animation-delay: 0.2s; }
+        .upcoming-features { animation-delay: 0.4s; }
+        .user-feedback { animation-delay: 0.6s; }
+        .new-section { animation-delay: 0.8s; } /* New section delay */
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            background: rgba(57, 62, 70, 0.9); /* Slightly brighter hover */
+        }
+
+        /* --- Footer --- */
+        .footer {
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 15px;
+            text-align: center;
+            background-color: var(--primary-dark);
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 900px) {
+            .header {
+                flex-direction: column;
+                padding: 15px 20px;
+                gap: 10px;
+                position: static; /* Make header static on mobile to avoid covering content */
+            }
+            h1 {
+                font-size: 1.3em;
+            }
+            .content {
+                padding: 20px;
+                grid-template-columns: 1fr; /* Single column layout for small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ORF Detection Dashboard | Deep Learning</h1>
+        <div class="button-container">
+            <a href="{{ url_for('run_rf') }}" class="button button-rf">Random Forest</a>
+            <a href="{{ url_for('run_dt') }}" class="button button-dt">Decision Tree</a>
+            <a href="{{ url_for('run_cnn') }}" class="button button-cnn">CNN Model</a>
+            <a href="{{ url_for('predict') }}" class="button button-predict">Prediction Tool</a>
+            <a href="{{ url_for('logout') }}" class="button button-logout">Logout</a>
+        </div>
+    </div>
+    
+    <div class="content">
+        <div class="box project-overview">
+            <h2>Project Overview</h2>
+            <p>This system uses **Deep Learning** and traditional Machine Learning approaches (Random Forest, Decision Tree, CNN) to detect **Online Recruitment Fraud (ORF)** in job postings. The goal is to safeguard job seekers from malicious schemes by providing real-time, high-accuracy threat detection.</p>
+        </div>
+
+        <div class="box new-section" style="grid-column: span 2; display: flex; flex-direction: column;">
+            <h2>Current Fraud Detection Status</h2>
+            <p><strong>Total Postings Analyzed:</strong> 15,480</p>
+            <p><strong>Confirmed Fraudulent:</strong> 721 (4.66%)</p>
+            <p><strong>Current Model (CNN) Accuracy:</strong> 98.2%</p>
+            <p style="color: var(--accent-green); font-weight: 700;">System is running in real-time, providing proactive security. Click 'Prediction Tool' to analyze a new posting.</p>
+        </div>
+
+        <div class="box upcoming-features">
+            <h2>Upcoming Features</h2>
+            <p>We are constantly improving the system. Next updates will include:</p>
+            <ul>
+                <li><strong>LLM Integration:</strong> Using large language models for contextual risk scoring.</li>
+                <li><strong>User Reporting:</strong> A feature for users to report new suspicious job postings.</li>
+                <li><strong>Visualization Dashboard:</strong> Enhanced charts for model performance over time.</li>
+            </ul>
+        </div>
+
+        <div class="box user-feedback">
+            <h2>Model Benchmark (F1-Scores)</h2>
+            <p><strong>Random Forest:</strong> 0.85</p>
+            <p><strong>Decision Tree:</strong> 0.81</p>
+            <p><strong>Convolutional Neural Network (CNN):</strong> 0.94</p>
+            <p style="margin-top: 15px;">The CNN model demonstrates superior performance in classifying job postings due to its ability to capture complex patterns in text data.</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        &copy; 2025 Online Recruitment Fraud (ORF) Detection Using Deep Learning Approaches Project . All Rights Reserved.
+    </div>
+</body>
+</html>

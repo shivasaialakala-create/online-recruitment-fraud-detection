@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <style>
+        body {
+            background-color: #f0f8ff; /* Optional: Set a light background color */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Full viewport height */
+            margin: 0; /* Remove default margin */
+        }
+        h1 {
+            color: blue;
+            text-align: center;
+        }
+        button {
+            background-color: #f10078; /* Button color */
+            color: #ffffff; /* Button text color */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px; /* Space above the button */
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #d90068; /* Change color on hover */
+        }
+        input[type="file"] {
+            margin-top: 20px; /* Space above the file input */
+        }
+    </style>
+</head>
+<body>
+    <h1>Pneumonia Disease Detection</h1>
+    
+    <!-- File Upload Input -->
+    <input type="file" id="fileUpload" name="fileUpload" accept=".jpg, .jpeg, .png, .bmp, .gif" />
+    
+    <!-- Upload Button -->
+    <button onclick="uploadFile()">Upload</button>
+
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById('fileUpload');
+            const file = fileInput.files[0]; // Get the first file from the input
+            
+            if (file) {
+                // You can process the file here if needed
+                alert('File "' + file.name + '" has been uploaded successfully!');
+
+                // Redirect to result.html after uploading
+                window.location.href = 'result.html'; // Make sure result.html is in the same directory
+            } else {
+                alert('Please select a file to upload.');
+            }
+        }
+    </script>
+</body>
+</html>

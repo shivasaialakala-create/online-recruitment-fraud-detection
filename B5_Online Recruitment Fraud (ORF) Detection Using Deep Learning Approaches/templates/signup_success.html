@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Complete! 🎉</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* Consistent Color Palette */
+        :root {
+            --success-green: #3DDC84; /* Vibrant Green (Success) */
+            --primary-coral: #ff6f61; /* Main button/accent color */
+            --background-dark-primary: #1a1a1a; /* Solid dark background */
+            --text-light: #f1f3f5;
+            --font-family: 'Poppins', sans-serif;
+            --secondary-blue: #0096FF;
+            --panel-bg: #222; /* Slightly lighter dark background for contrast */
+            --light-blue-bg: #e0f2f7; /* New: Light blue for success box background */
+        }
+
+        /* Base Styles */
+        body {
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background-color: var(--background-dark-primary); 
+            color: var(--text-light);
+        }
+
+        /* --- Header/Navigation Bar --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background-color: rgba(26, 26, 26, 0.95);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+            width: 100%;
+            position: sticky;
+            top: 0;
+            box-sizing: border-box;
+        }
+        .logo-text {
+            color: var(--secondary-blue);
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+        }
+        .logo-icon {
+            margin-right: 8px;
+            color: var(--success-green);
+        }
+        .header a:hover {
+            opacity: 1 !important;
+            color: var(--primary-coral) !important;
+        }
+
+        /* --- Main Content Area (Two-Column Layout) --- */
+        .main-content {
+            flex-grow: 1; 
+            display: flex;
+            width: 100%;
+        }
+
+        /* Left Panel: Image/Branding */
+        .image-panel {
+            flex: 1;
+            background-image: url('https://picsum.photos/1000/1000?random=1&blur=2'); /* Placeholder image */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-light);
+            padding: 50px;
+            position: relative;
+        }
+        .image-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5); /* Dark overlay for text readability */
+        }
+        .image-panel h2 {
+            font-size: 2.5em;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+            z-index: 2;
+            text-align: center;
+        }
+
+        /* Right Panel: Success Content Wrapper */
+        .content-panel {
+            flex: 1;
+            background-color: var(--panel-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        /* --- Success Box: Now with two columns inside --- */
+        .success-box {
+            background: var(--light-blue-bg); /* Changed to light blue */
+            color: #333;
+            padding: 30px; /* Adjusted padding */
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 800px; /* Increased max-width to accommodate two columns */
+            width: 100%;
+            opacity: 0; 
+            transform: scale(0.95);
+            animation: fadeInScale 0.6s ease-out forwards;
+            display: flex; /* Make success-box a flex container */
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            justify-content: center; /* Center content horizontally */
+            align-items: center; /* Center content vertically */
+        }
+
+        /* New: Styles for the internal two columns within success-box */
+        .success-box-left {
+            flex: 1; /* Takes 50% of the space */
+            min-width: 250px; /* Ensure minimum width for content */
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .success-box-right {
+            flex: 1; /* Takes 50% of the space */
+            min-width: 300px; /* Ensure minimum width for content */
+            padding: 20px;
+            text-align: left; /* Align text to the left for readability */
+        }
+
+        /* Image within the success-box-left */
+        .success-box-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Animation for rich, modern appearance */
+        @keyframes fadeInScale {
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            color: var(--success-green);
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .icon-check {
+            font-size: 3.5em;
+            color: var(--success-green);
+            margin-bottom: 15px;
+            animation: bounce 0.8s ease-out;
+            display: block;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .success-message {
+            font-size: 1em;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+        
+        .next-steps {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+            margin-bottom: 25px;
+        }
+
+        /* Call to Action Button Style remains consistent */
+        .button { 
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 30px; 
+            background: linear-gradient(135deg, var(--primary-coral) 0%, #ff5a47 100%);
+            color: var(--text-light); 
+            border: none; 
+            border-radius: 30px; 
+            cursor: pointer; 
+            font-size: 1em; 
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease; 
+            box-shadow: 0 8px 20px rgba(255, 111, 97, 0.4);
+        }
+
+        .button:hover { 
+            background: linear-gradient(135deg, #ff5a47 0%, var(--primary-coral) 100%);
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 10px 20px rgba(255, 111, 97, 0.6);
+        }
+        
+        .button i {
+            margin-right: 8px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 900px) {
+            .main-content {
+                flex-direction: column; /* Stack main panels on smaller screens */
+            }
+            .image-panel {
+                height: 300px; /* Give image panel a fixed height when stacked */
+            }
+            .header {
+                padding: 15px 20px;
+            }
+            .logo-text {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .success-box {
+                flex-direction: column; /* Stack success box content on smaller screens */
+                max-width: 90%;
+            }
+            .success-box-left, .success-box-right {
+                flex: none; /* Remove flex sizing */
+                width: 100%; /* Take full width */
+                padding: 15px;
+                text-align: center; /* Center text when stacked */
+            }
+            .success-box-right h1 {
+                font-size: 1.8em;
+            }
+            .icon-check {
+                font-size: 3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="header">
+        <div class="logo-text">
+            <i class="fas fa-shield-alt logo-icon"></i>
+            ORF Detector
+        </div>
+        <a href="/" style="color: var(--text-light); text-decoration: none; font-weight: 500; opacity: 0.8; transition: opacity 0.3s;">
+            <i class="fas fa-home"></i> Go to Homepage
+        </a>
+    </div>
+
+    <div class="main-content">
+        
+        <div class="image-panel">
+            <h2>
+                Protect Your Career.<br>
+                Deep Learning Security Activated.
+            </h2>
+        </div>
+        
+        <div class="content-panel">
+            <div class="success-box">
+                <div class="success-box-left">
+                    <img src="https://picsum.photos/400/300?random=2" alt="Success Illustration" class="success-box-image">
+                </div>
+                <div class="success-box-right">
+                    <i class="fas fa-check-circle icon-check"></i>
+                    
+                    <h1>Registration Complete!</h1>
+                    
+                    <p class="success-message">
+                        Welcome, **{{ username }}**! Your account is now **fully secured**. You can immediately access our cutting-edge Deep Learning Fraud Detection System.
+                    </p>
+                    
+                    <p class="next-steps">
+                        **Action Required:** Click the button below to log in and start analyzing job postings for potential fraud with confidence.
+                    </p>
+                    
+                    <a href="/login" class="button">
+                        <i class="fas fa-sign-in-alt"></i> Secure My Job Search
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
